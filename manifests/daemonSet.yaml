@@ -1,0 +1,70 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  labels:
+    app: etcd-proxy-server
+  name: etcd-proxy-server
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: etcd-proxy-server
+  template: 
+    metadata:
+      labels:
+        app: etcd-proxy-server
+    spec:
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      volumes:
+      - name: cert-dir
+        hostPath:
+          path: /etc/kubernetes/pki/etcd
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: node-role.kubernetes.io/master
+                operator: In
+                values:
+                - ""
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: etcd-proxy-server
+        image: registry.services.mts.ru/kubernetes/tools/etcd-proxy-server:0.1.0
+        ports:
+        - name: etcd-proxy
+          containerPort: 8888
+          hostPort: 8888
+        readinessProbe:
+          tcpSocket:
+            port: 8888
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          failureThreshold: 3
+        livenessProbe:
+          tcpSocket:
+            port: 8888
+          initialDelaySeconds: 20
+          periodSeconds: 60
+        resources:
+          limits:
+            cpu: 20m
+            memory: 40Mi
+          requests:
+            cpu: 10m
+            memory: 20Mi
+        env:
+        - name: HOST_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: cert-dir
+          mountPath: /etc/kubernetes/pki/etcd
+          readOnly: true

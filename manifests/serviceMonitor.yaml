@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: etcd-proxy-server
+  name: etcd-proxy-server
+  namespace: monitoring
+spec:
+  endpoints:
+  - interval: 1m
+    port: etcd-metrics
+  jobLabel: etcd-proxy-server
+  namespaceSelector:
+    matchNames:
+    - monitoring
+  selector:
+    matchLabels:
+      app: metrics
+      service: etcd-proxy-server

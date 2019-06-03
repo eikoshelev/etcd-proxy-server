@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: metrics
+    service: etcd-proxy-server
+  name: etcd-proxy-server
+  namespace: monitoring
+spec:
+  clusterIP: None
+  ports:
+  - name: etcd-metrics
+    port: 8888
+    protocol: TCP
+    targetPort: etcd-proxy
+  selector:
+    app: etcd-proxy-server
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
