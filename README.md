@@ -1,14 +1,14 @@
 # etcd-proxy-server
 
-Прокси для сбора метрик etcd с помощью Prometheus по протоколу HTTPS в кластере Kubernetes
+Proxy to collect etcd metrics using Prometheus over HTTPS in a Kubernetes cluster
 
 ![alt text](common/scheme.png)
 
-* Автоматически разворачивается на мастер-нодах ([daemonSet.yaml](https://gitlab.services.mts.ru/pbrf/monitoring/etcd-proxy-server/blob/master/manifests/daemonSet.yaml));
-* Используя сертификаты, расположенные в `/etc/kubernetes/pki/etcd`, конфигурирует HTTPS клиент;
-* Получает запросы на получение метрик и от имени сконфигурированного клиента обращается к etcd;
-* Возвращает полученные метрики;
-* Разрешает только `GET` запросы по хендлеру `/metrics`;
+* Automatically deployed on master nodes ([daemonSet.yaml](manifests/daemonSet.yaml));
+* Using certificates located in `/ etc / kubernetes / pki / etcd`, configures the HTTPS client;
+* Receives requests for receiving metrics and, on behalf of the configured client, refers to etcd;
+* Returns received metrics;
+* Allows only `GET` requests for the handler` / metrics`;
 
 #### Usage:
 
@@ -34,5 +34,5 @@ Usage of ./etcd-proxy-server:
     	WriteTimeout for server (default 10)
 ```
   
-`hostIP` по умолчанию читает одноименную переменную окружения, которая задается в зависимости от ноды, на которой развернулся под, подробнее — [daemonSet.yaml](https://gitlab.services.mts.ru/pbrf/monitoring/etcd-proxy-server/blob/master/manifests/daemonSet.yaml#L61)
+`hostIP` reads the environment variable of the same name by default, which is set depending on the node on which it is deployed under, for more details see [daemonSet.yaml](manifests/daemonSet.yaml#L61)
 
