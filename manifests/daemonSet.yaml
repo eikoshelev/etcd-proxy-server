@@ -35,7 +35,7 @@ spec:
             topologyKey: "kubernetes.io/hostname"
       containers:
       - name: etcd-proxy-server
-        image: registry.services.mts.ru/kubernetes/tools/etcd-proxy-server:0.1.0
+        image: eikoshelev/etcd-proxy-server
         ports:
         - name: etcd-proxy
           containerPort: 8888
