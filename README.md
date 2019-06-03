@@ -5,10 +5,10 @@ Proxy to collect etcd metrics using Prometheus over HTTPS in a Kubernetes cluste
 ![alt text](common/scheme.png)
 
 * Automatically deployed on master nodes ([daemonSet.yaml](manifests/daemonSet.yaml));
-* Using certificates located in `/ etc / kubernetes / pki / etcd`, configures the HTTPS client;
+* Using certificates located in `/etc/kubernetes/pki/etcd`, configures the HTTPS client;
 * Receives requests for receiving metrics and, on behalf of the configured client, refers to etcd;
 * Returns received metrics;
-* Allows only `GET` requests for the handler` / metrics`;
+* Allows only `GET` requests for the handler` /metrics`;
 
 #### Usage:
 
