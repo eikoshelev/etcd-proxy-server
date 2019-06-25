@@ -12,7 +12,7 @@ Proxy to collect etcd metrics using Prometheus over HTTPS in a Kubernetes cluste
 * Returns received metrics;
 * Allows only `GET` requests for the handler` /metrics`;
 
-#### Usage:
+## Usage:
 
 ```
 ./etcd-proxy-server -h
@@ -38,3 +38,7 @@ Usage of ./etcd-proxy-server:
   
 `hostIP` reads the environment variable of the same name by default, which is set depending on the node on which it is deployed under, for more details see [daemonSet.yaml](manifests/daemonSet.yaml#L61)
 
+## Docker container
+```
+docker pull eikoshelev/etcd-proxy-server
+```
