@@ -2,33 +2,32 @@ package main
 
 import (
 	"flag"
-	"log"
+	"net/http"
 	"os"
 )
 
-// Network — server and client settings
-type Network struct {
+type network struct {
 	Addr           string
 	ServerRTimeout int
 	ServerWTimeout int
 	ClientTimeout  int
 	HostIP         string
+	Client         *http.Client
+	EtcdEndpoint   string
 }
 
 func main() {
 
-	var net Network
+	var net network
 
 	flag.StringVar(&net.Addr, "addr", ":8888", "Server port")
-	flag.IntVar(&net.ServerRTimeout, "serverRTimeout", 10, "ReadTimeout for server")
-	flag.IntVar(&net.ServerWTimeout, "serverWTimeout", 10, "WriteTimeout for server")
+	flag.IntVar(&net.ServerRTimeout, "serverRTimeout", 3, "ReadTimeout for server")
+	flag.IntVar(&net.ServerWTimeout, "serverWTimeout", 3, "WriteTimeout for server")
 	flag.IntVar(&net.ClientTimeout, "clientTimeout", 10, "Timeout for client")
 	flag.StringVar(&net.HostIP, "hostIP", os.Getenv("HOST_IP"), "Host machine IP")
 
-	cert, caCertPool, err := certsCheck()
-	if err != nil {
-		log.Fatalf("Failed check certificates: %s", err)
-	} else {
-		proxy(cert, caCertPool, net)
+	cert, caCertPool, ok := certsCheck()
+	if ok {
+		net.proxy(cert, caCertPool)
 	}
 }
