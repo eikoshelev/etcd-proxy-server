@@ -1,6 +1,6 @@
 FROM golang:alpine AS build
 WORKDIR /src
-ADD *.go .
+ADD ./*.go .
 WORKDIR /src
 RUN go build -o etcd-proxy-server
 
