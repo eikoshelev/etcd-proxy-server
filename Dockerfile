@@ -1,4 +1,10 @@
-FROM alpine:3.8
+FROM golang:alpine AS build
+WORKDIR /src
+ADD *.go .
+WORKDIR /src
+RUN go build -o etcd-proxy-server
 
-COPY etcd-proxy-server /bin/
+FROM alpine
+WORKDIR /bin
+COPY --from=build /src/etcd-proxy-server .
 CMD ["etcd-proxy-server"]
