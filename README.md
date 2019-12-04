@@ -7,7 +7,7 @@ Proxy to collect etcd metrics using Prometheus over HTTPS in a Kubernetes cluste
 
 ![alt text](assets/scheme.png)
 
-* Automatically deployed on master nodes ([daemonSet.yaml](manifests/daemonSet.yaml));
+* Automatically deployed on master nodes ([daemonSet.yaml](kubernetes/manifests/daemonSet.yaml));
 * Using certificates located in `/etc/kubernetes/pki/etcd`, configures the HTTPS client;
 * Receives requests for receiving metrics and, on behalf of the configured client, refers to etcd;
 * Returns received metrics;
@@ -37,7 +37,7 @@ Usage of ./etcd-proxy-server:
     	WriteTimeout for server (default 10)
 ```
   
-`hostIP` reads the environment variable of the same name by default, which is set depending on the node on which it is deployed under, for more details see [daemonSet.yaml](manifests/daemonSet.yaml#L61)
+`hostIP` reads the environment variable of the same name by default, which is set depending on the node on which it is deployed under, for more details see [daemonSet.yaml](kubernetes/manifests/daemonSet.yaml#L61)
 
 ## Docker container
 ```
