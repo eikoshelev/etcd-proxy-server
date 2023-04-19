@@ -4,8 +4,8 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"flag"
-	"io/ioutil"
 	"log"
+	"os"
 )
 
 type certificates struct {
@@ -36,7 +36,7 @@ func certsCheck() (tls.Certificate, *x509.CertPool, bool) {
 	log.Printf("%s — OK\n", certs.Ca)
 
 	// load CA cert
-	caCert, err := ioutil.ReadFile(certs.Ca)
+	caCert, err := os.ReadFile(certs.Ca)
 	if err != nil {
 		log.Fatalf("Failed read 'Ca' file: %s", err)
 	}
