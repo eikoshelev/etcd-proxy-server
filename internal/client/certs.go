@@ -1,9 +1,8 @@
-package main
+package client
 
 import (
 	"crypto/tls"
 	"crypto/x509"
-	"flag"
 	"log"
 	"os"
 )
@@ -14,16 +13,7 @@ type certificates struct {
 	Key  string
 }
 
-func certsCheck() (tls.Certificate, *x509.CertPool, bool) {
-
-	var certs certificates
-
-	flag.StringVar(&certs.Cert, "certFile", "/etc/kubernetes/pki/etcd/healthcheck-client.crt", "A PEM eoncoded certificate file")
-	flag.StringVar(&certs.Ca, "caFile", "/etc/kubernetes/pki/etcd/ca.crt", "A PEM eoncoded CA's certificate file")
-	flag.StringVar(&certs.Key, "keyFile", "/etc/kubernetes/pki/etcd/healthcheck-client.key", "A PEM encoded private key file")
-
-	flag.Parse()
-
+func (certs *certificates) Check() (tls.Certificate, *x509.CertPool, bool) {
 	log.Printf("Checking cert files..\n")
 
 	// load client cert

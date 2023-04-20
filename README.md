@@ -1,6 +1,3 @@
-[![Build Status](https://travis-ci.org/eikoshelev/etcd-proxy-server.svg?branch=master)](https://travis-ci.org/eikoshelev/etcd-proxy-server)
-![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/eikoshelev/etcd-proxy-server)
-
 # etcd-proxy-server
 
 Proxy to collect etcd metrics using Prometheus over HTTPS in a Kubernetes cluster
