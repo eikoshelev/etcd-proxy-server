@@ -3,9 +3,10 @@ package client
 import (
 	"crypto/tls"
 	"io"
-	"log"
 	"net/http"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 type Client struct {
@@ -15,42 +16,36 @@ type Client struct {
 	Certs         certificates
 }
 
-func (c *Client) New() *Client {
-	cert, caCertPool, ok := c.Certs.Check()
-	if !ok {
-		log.Fatal("pizdec")
+func Setup(c *Client) (*Client, error) {
+	cert, caCertPool, err := c.Certs.Verify()
+	if err != nil {
+		return nil, errors.Wrap(err, "certificate verification failed")
 	}
 	// Setup HTTPS
 	tlsConfig := &tls.Config{
 		Certificates: []tls.Certificate{cert},
 		RootCAs:      caCertPool,
 	}
-
-	//tlsConfig.BuildNameToCertificate()
-
-	c.httpClient = &http.Client{
+	client := &http.Client{
 		Transport: &http.Transport{
 			TLSClientConfig: tlsConfig,
 		},
 		Timeout: time.Duration(c.ClientTimeout) * time.Second,
 	}
-
-	return &Client{}
+	return &Client{
+		httpClient: client,
+	}, nil
 }
 
 func (c *Client) Do() ([]byte, error) {
 	resp, err := c.httpClient.Get(c.EtcdEndpoint)
 	if err != nil {
-		log.Printf("Failed send GET request: %s", err.Error())
-		return nil, err
+		return nil, errors.Wrap(err, "failed to complete the request")
 	}
-
 	defer resp.Body.Close()
-
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Printf("Failed get body from response: %s", err.Error())
-		return nil, err
+		return nil, errors.Wrap(err, "failed to read response body")
 	}
 	return data, nil
 }

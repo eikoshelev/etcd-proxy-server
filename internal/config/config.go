@@ -10,11 +10,11 @@ import (
 )
 
 type ProxyConfig struct {
-	Server *server.Server
-	Client *client.Client
+	Server server.Server
+	Client client.Client
 }
 
-func Configure() *ProxyConfig {
+func Configure() (*ProxyConfig, error) {
 	var conf ProxyConfig
 	// server
 	flag.StringVar(&conf.Server.Port, "serverPort", ":8888", "Server port")
@@ -28,6 +28,10 @@ func Configure() *ProxyConfig {
 	flag.StringVar(&conf.Client.Certs.Cert, "certFile", "/etc/kubernetes/pki/etcd/healthcheck-client.crt", "A PEM eoncoded certificate file")
 	flag.StringVar(&conf.Client.Certs.Ca, "caFile", "/etc/kubernetes/pki/etcd/ca.crt", "A PEM eoncoded CA's certificate file")
 	flag.StringVar(&conf.Client.Certs.Key, "keyFile", "/etc/kubernetes/pki/etcd/healthcheck-client.key", "A PEM encoded private key file")
+
+	flag.Parse()
+
 	conf.Client.EtcdEndpoint = fmt.Sprintf("https://%s:2379/metrics", conf.Server.HostIP)
-	return &conf
+
+	return &conf, nil
 }
