@@ -10,28 +10,32 @@ Proxy to collect etcd metrics using Prometheus over HTTPS in a Kubernetes cluste
 * Returns received metrics;
 * Allows only `GET` requests for the handler `/metrics`;
 
-## Usage:
+## Kubernetes
+// TODO
+
 
 ```
 ./etcd-proxy-server -h
 
 Usage of ./etcd-proxy-server:
-  -addr string
-    	Server port (default ":8888")
   -caFile string
     	A PEM eoncoded CA's certificate file (default "/etc/kubernetes/pki/etcd/ca.crt")
   -certFile string
     	A PEM eoncoded certificate file (default "/etc/kubernetes/pki/etcd/healthcheck-client.crt")
-  -keyFile string
-    	A PEM encoded private key file (default "/etc/kubernetes/pki/etcd/healthcheck-client.key")
-  -clientTimeout int
-    	Timeout for client (default 10)
+  -clientTimeout duration
+    	Timeout for client (default 10s)
   -hostIP string
     	Host machine IP
-  -serverRTimeout int
-    	ReadTimeout for server (default 10)
-  -serverWTimeout int
-    	WriteTimeout for server (default 10)
+  -keyFile string
+    	A PEM encoded private key file (default "/etc/kubernetes/pki/etcd/healthcheck-client.key")
+  -metricsRoute string
+    	Route for collecting metrics (default "/metrics")
+  -serverPort string
+    	Server port (default ":8888")
+  -serverRTimeout duration
+    	ReadTimeout for server (default 10s)
+  -serverWTimeout duration
+    	WriteTimeout for server (default 10s)
 ```
   
 `hostIP` reads the environment variable of the same name by default, which is set depending on the node on which it is deployed under, for more details see [daemonSet.yaml](kubernetes/manifests/daemonSet.yaml#L61)

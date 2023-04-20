@@ -37,7 +37,7 @@ func Setup(c *Client) (*Client, error) {
 	}, nil
 }
 
-func (c *Client) Do() ([]byte, error) {
+func (c *Client) GetMetrics() ([]byte, error) {
 	resp, err := c.httpClient.Get(c.EtcdEndpoint)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to complete the request")

@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/eikoshelev/etcd-proxy-server/internal/client"
 	"github.com/eikoshelev/etcd-proxy-server/internal/server"
@@ -14,16 +15,27 @@ type ProxyConfig struct {
 	Client client.Client
 }
 
+const (
+	serverRTimeout string = "10s"
+	serverWTimeout string = "10s"
+	clientTimeout  string = "10s"
+)
+
 func Configure() (*ProxyConfig, error) {
 	var conf ProxyConfig
+
+	serverRT, _ := time.ParseDuration(serverRTimeout)
+	serverWR, _ := time.ParseDuration(serverWTimeout)
+	clientT, _ := time.ParseDuration(clientTimeout)
+
 	// server
 	flag.StringVar(&conf.Server.Port, "serverPort", ":8888", "Server port")
-	flag.DurationVar(&conf.Server.RTimeout, "serverRTimeout", 10, "ReadTimeout for server")
-	flag.DurationVar(&conf.Server.WTimeout, "serverWTimeout", 10, "WriteTimeout for server")
+	flag.DurationVar(&conf.Server.RTimeout, "serverRTimeout", serverRT, "ReadTimeout for server")
+	flag.DurationVar(&conf.Server.WTimeout, "serverWTimeout", serverWR, "WriteTimeout for server")
 	flag.StringVar(&conf.Server.HostIP, "hostIP", os.Getenv("HOST_IP"), "Host machine IP")
 	flag.StringVar(&conf.Server.MetricsRoute, "metricsRoute", "/metrics", "Route for collecting metrics")
 	// client
-	flag.DurationVar(&conf.Client.ClientTimeout, "clientTimeout", 10, "Timeout for client")
+	flag.DurationVar(&conf.Client.ClientTimeout, "clientTimeout", clientT, "Timeout for client")
 	// client certs
 	flag.StringVar(&conf.Client.Certs.Cert, "certFile", "/etc/kubernetes/pki/etcd/healthcheck-client.crt", "A PEM eoncoded certificate file")
 	flag.StringVar(&conf.Client.Certs.Ca, "caFile", "/etc/kubernetes/pki/etcd/ca.crt", "A PEM eoncoded CA's certificate file")
