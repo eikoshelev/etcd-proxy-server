@@ -32,7 +32,7 @@ docker run -d --name etcd-proxy-server eikoshelev/etcd-proxy-server:v2.0.0
 
 ### Description
 
-```sh
+```
 ./etcd-proxy-server -h
 
 Usage of ./etcd-proxy-server:
