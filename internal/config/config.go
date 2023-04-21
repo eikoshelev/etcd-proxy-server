@@ -15,18 +15,21 @@ type ProxyConfig struct {
 	Client client.Client
 }
 
-const (
-	serverRTimeout string = "10s"
-	serverWTimeout string = "10s"
-	clientTimeout  string = "10s"
-)
-
 func Configure() (*ProxyConfig, error) {
 	var conf ProxyConfig
 
-	serverRT, _ := time.ParseDuration(serverRTimeout)
-	serverWR, _ := time.ParseDuration(serverWTimeout)
-	clientT, _ := time.ParseDuration(clientTimeout)
+	serverRT, err := time.ParseDuration("10s")
+	if err != nil {
+		return nil, err
+	}
+	serverWR, err := time.ParseDuration("10s")
+	if err != nil {
+		return nil, err
+	}
+	clientT, err := time.ParseDuration("10s")
+	if err != nil {
+		return nil, err
+	}
 
 	// server
 	flag.StringVar(&conf.Server.Port, "serverPort", ":8888", "Server port")
