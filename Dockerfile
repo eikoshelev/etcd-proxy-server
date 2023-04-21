@@ -1,10 +1,9 @@
-FROM golang:alpine AS build
+FROM golang:1.19 AS builder
 WORKDIR /src
 ADD . .
-WORKDIR /src
-RUN go build -o etcd-proxy-server
+RUN CGO_ENABLED=0 GOOS=linux go build -o etcd-proxy-server ./cmd/etcd-proxy-server/
 
-FROM alpine
+FROM alpine:latest AS production
 WORKDIR /bin
-COPY --from=build /src/etcd-proxy-server .
+COPY --from=builder /src/etcd-proxy-server .
 CMD ["etcd-proxy-server"]

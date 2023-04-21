@@ -4,7 +4,6 @@ metadata:
   labels:
     app: etcd-proxy-server
   name: etcd-proxy-server
-  namespace: monitoring
 spec:
   endpoints:
   - interval: 1m

@@ -1,10 +1,9 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   labels:
     app: etcd-proxy-server
   name: etcd-proxy-server
-  namespace: monitoring
 spec:
   selector:
     matchLabels:
@@ -15,9 +14,9 @@ spec:
         app: etcd-proxy-server
     spec:
       nodeSelector:
-        node-role.kubernetes.io/master: ""
+        node-role.kubernetes.io/control-plane: ""
       tolerations:
-      - key: node-role.kubernetes.io/master
+      - key: node-role.kubernetes.io/control-plane
         effect: NoSchedule
       volumes:
       - name: cert-dir
@@ -28,14 +27,14 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchExpressions:
-              - key: node-role.kubernetes.io/master
+              - key: node-role.kubernetes.io/control-plane
                 operator: In
                 values:
                 - ""
             topologyKey: "kubernetes.io/hostname"
       containers:
       - name: etcd-proxy-server
-        image: eikoshelev/etcd-proxy-server
+        image: eikoshelev/etcd-proxy-server:v2.0.0
         ports:
         - name: etcd-proxy
           containerPort: 8888

@@ -5,7 +5,6 @@ metadata:
     app: metrics
     service: etcd-proxy-server
   name: etcd-proxy-server
-  namespace: monitoring
 spec:
   clusterIP: None
   ports:
