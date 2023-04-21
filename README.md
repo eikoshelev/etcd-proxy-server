@@ -1,6 +1,6 @@
 # etcd-proxy-server
 
-Proxy to collect etcd metrics using Prometheus over HTTPS in a Kubernetes cluster
+Proxy to collect [etcd](https://etcd.io/) metrics using [Prometheus](https://prometheus.io/) over HTTPS in a [Kubernetes](https://kubernetes.io/) cluster
 
 ![alt text](assets/scheme.png)
 
@@ -10,11 +10,29 @@ Proxy to collect etcd metrics using Prometheus over HTTPS in a Kubernetes cluste
 * Returns received metrics;
 * Allows only `GET` requests for the handler `/metrics`;
 
-## Kubernetes
-// TODO
+## Usage
 
+### Kubernetes
 
+Just do it and forget it:
+
+```sh
+git clone git@github.com:eikoshelev/etcd-proxy-server.git && cd etcd-proxy-server
 ```
+
+```sh
+kubectl apply -f kubernetes -n <namespace>
+```
+
+### Docker container
+
+```sh
+docker run -d --name etcd-proxy-server eikoshelev/etcd-proxy-server:v2.0.0
+```
+
+### Description
+
+```sh
 ./etcd-proxy-server -h
 
 Usage of ./etcd-proxy-server:
@@ -39,8 +57,3 @@ Usage of ./etcd-proxy-server:
 ```
   
 `hostIP` reads the environment variable of the same name by default, which is set depending on the node on which it is deployed under, for more details see [daemonSet.yaml](kubernetes/manifests/daemonSet.yaml#L61)
-
-## Docker container
-```
-docker pull eikoshelev/etcd-proxy-server
-```
